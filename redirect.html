@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TapCard</title>
+</head>
+
+<body>
+  <p id="message">Please wait...</p>
+
+  <script>
+    const SUPABASE_URL =
+      "https://ekgfbjmftxmgkicvjhap.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_ujjKE_jxYbfUl4iHnSFmtw_yU2Qa5Ug";
+
+    const params = new URLSearchParams(window.location.search);
+    const cardNumber = params.get("card");
+
+    async function redirectCard() {
+
+      if (!cardNumber) {
+        document.getElementById("message").innerText =
+          "Invalid TapCard.";
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/cards?card_number=eq.${encodeURIComponent(cardNumber)}&status=eq.Activated&select=destination_url`
+        , {
+          headers: {
+            "apikey": SUPABASE_KEY,
+            "Authorization": `Bearer ${SUPABASE_KEY}`
+          }
+        });
+
+        const data = await response.json();
+
+        if (data.length === 0 || !data[0].destination_url) {
+          document.getElementById("message").innerText =
+            "This TapCard is not activated.";
+          return;
+        }
+
+        window.location.replace(data[0].destination_url);
+
+      } catch (error) {
+        document.getElementById("message").innerText =
+          "Something went wrong. Please try again.";
+      }
+    }
+
+    redirectCard();
+  </script>
+</body>
+</html>
