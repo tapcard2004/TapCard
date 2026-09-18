@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TapCard | One Tap. More Connections.</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#05070b;
+  color:#fff;
+  line-height:1.5;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+.container{
+  width:92%;
+  max-width:1150px;
+  margin:auto;
+}
+
+/* NAVBAR */
+nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(5,7,11,.94);
+  border-bottom:1px solid #1d2635;
+  backdrop-filter:blur(10px);
+}
+
+.nav-inner{
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:-1px;
+}
+
+.logo span{
+  color:#18a8ff;
+}
+
+.nav-links{
+  display:flex;
+  gap:25px;
+  font-size:14px;
+  color:#c9d2df;
+}
+
+.nav-links a:hover{
+  color:#18a8ff;
+}
+
+/* BUTTONS */
+.btn{
+  display:inline-block;
+  padding:13px 21px;
+  border-radius:10px;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:#18a8ff;
+  color:#00101d;
+}
+
+.btn-primary:hover{
+  background:#45baff;
+}
+
+.btn-outline{
+  border:1px solid #344154;
+  color:#fff;
+}
+
+.btn-outline:hover{
+  border-color:#18a8ff;
+  color:#18a8ff;
+}
+
+/* HERO */
+.hero{
+  padding:90px 0 80px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(24,168,255,.15),transparent 38%);
+}
+
+.badge{
+  display:inline-block;
+  border:1px solid #23445d;
+  background:#0b1420;
+  color:#6bc9ff;
+  padding:7px 13px;
+  border-radius:50px;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:22px;
+}
+
+.hero h1{
+  font-size:clamp(42px,8vw,76px);
+  line-height:1.02;
+  letter-spacing:-3px;
+  margin-bottom:22px;
+}
+
+.hero h1 span{
+  color:#18a8ff;
+}
+
+.hero p{
+  max-width:650px;
+  margin:0 auto 30px;
+  color:#aeb9c8;
+  font-size:18px;
+}
+
+.hero-buttons{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+/* SECTIONS */
+section{
+  padding:75px 0;
+}
+
+.section-title{
+  text-align:center;
+  margin-bottom:45px;
+}
+
+.section-title h2{
+  font-size:36px;
+  margin-bottom:10px;
+}
+
+.section-title p{
+  color:#8995a6;
+}
+
+/* CARDS */
+.products{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.product{
+  background:#0b1018;
+  border:1px solid #202b3a;
+  border-radius:18px;
+  padding:28px;
+  transition:.2s;
+}
+
+.product:hover{
+  transform:translateY(-5px);
+  border-color:#18a8ff;
+}
+
+.product-icon{
+  width:55px;
+  height:55px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#101c2a;
+  border-radius:14px;
+  font-size:25px;
+  margin-bottom:20px;
+}
+
+.product h3{
+  font-size:22px;
+  margin-bottom:10px;
+}
+
+.product p{
+  color:#929eae;
+  min-height:72px;
+  font-size:14px;
+}
+
+.price{
+  font-size:27px;
+  font-weight:800;
+  margin:20px 0;
+}
+
+.price small{
+  font-size:13px;
+  color:#778394;
+  font-weight:400;
+}
+
+/* HOW IT WORKS */
+.steps{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.step{
+  text-align:center;
+  padding:25px;
+}
+
+.step-number{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  margin:0 auto 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#18a8ff;
+  color:#00101d;
+  font-weight:800;
+  font-size:20px;
+}
+
+.step h3{
+  margin-bottom:8px;
+}
+
+.step p{
+  color:#8e9aaa;
+  font-size:14px;
+}
+
+/* DEMO */
+.demo-box{
+  background:linear-gradient(135deg,#0b111a,#0c1825);
+  border:1px solid #20344a;
+  border-radius:22px;
+  padding:50px 25px;
+  text-align:center;
+}
+
+.demo-card{
+  width:290px;
+  height:175px;
+  margin:0 auto 30px;
+  border-radius:18px;
+  padding:25px;
+  text-align:left;
+  background:#080b10;
+  border:1px solid #344354;
+  box-shadow:0 15px 40px rgba(0,0,0,.4);
+}
+
+.demo-card .mini-logo{
+  font-size:20px;
+  font-weight:800;
+}
+
+.demo-card .mini-logo span{
+  color:#18a8ff;
+}
+
+.demo-card .tap{
+  margin-top:45px;
+  color:#91a1b3;
+  font-size:12px;
+}
+
+/* FEATURES */
+.features{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.feature{
+  background:#0b1018;
+  border:1px solid #202b3a;
+  padding:23px;
+  border-radius:15px;
+}
+
+.feature h3{
+  font-size:16px;
+  margin:10px 0 5px;
+}
+
+.feature p{
+  color:#8995a5;
+  font-size:13px;
+}
+
+/* CTA */
+.cta{
+  text-align:center;
+  background:#09111b;
+  border-top:1px solid #1d2b3b;
+  border-bottom:1px solid #1d2b3b;
+}
+
+.cta h2{
+  font-size:40px;
+  margin-bottom:12px;
+}
+
+.cta p{
+  color:#929eae;
+  margin-bottom:25px;
+}
+
+/* FOOTER */
+footer{
+  padding:35px 0;
+  color:#718094;
+  text-align:center;
+  font-size:13px;
+}
+
+footer strong{
+  color:#fff;
+}
+
+/* MOBILE */
+@media(max-width:800px){
+
+  .nav-links{
+    display:none;
+  }
+
+  .products,
+  .steps{
+    grid-template-columns:1fr;
+  }
+
+  .features{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .hero{
+    padding:65px 0;
+  }
+
+  .hero h1{
+    letter-spacing:-2px;
+  }
+
+  .section-title h2{
+    font-size:30px;
+  }
+
+  .cta h2{
+    font-size:30px;
+  }
+}
+
+@media(max-width:450px){
+  .features{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="container nav-inner">
+
+    <div class="logo">
+      Tap<span>Card</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="#products">Cards</a>
+      <a href="#how">How It Works</a>
+      <a href="#demo">Demo</a>
+      <a href="#contact">Contact</a>
+    </div>
+
+    <a href="#buy" class="btn btn-primary">Buy Now</a>
+
+  </div>
+</nav>
+
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+
+    <div class="badge">NFC + QR DIGITAL BUSINESS CARD</div>
+
+    <h1>
+      One Tap.<br>
+      <span>More Connections.</span>
+    </h1>
+
+    <p>
+      Turn every customer interaction into a simple tap.
+      Get more Google Reviews, connect on WhatsApp,
+      grow Instagram and make your business easier to reach.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#buy" class="btn btn-primary">Get Your TapCard</a>
+      <a href="#demo" class="btn btn-outline">See How It Works</a>
+    </div>
+
+  </div>
+</header>
+
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>Choose Your TapCard</h2>
+      <p>One card. One tap. One powerful connection.</p>
+    </div>
+
+    <div class="products">
+
+      <div class="product">
+        <div class="product-icon">⭐</div>
+        <h3>Google Review</h3>
+        <p>
+          Make it easier for your customers to leave
+          a Google review with one simple tap.
+        </p>
+
+        <div class="price">
+          ₹299 <small>/ card</small>
+        </div>
+
+        <a href="#buy" class="btn btn-primary">Buy Now</a>
+      </div>
+
+
+      <div class="product">
+        <div class="product-icon">💬</div>
+        <h3>WhatsApp</h3>
+        <p>
+          Connect customers directly to your
+          WhatsApp group or business link.
+        </p>
+
+        <div class="price">
+          ₹299 <small>/ card</small>
+        </div>
+
+        <a href="#buy" class="btn btn-primary">Buy Now</a>
+      </div>
+
+
+      <div class="product">
+        <div class="product-icon">📸</div>
+        <h3>Instagram</h3>
+        <p>
+          Send customers directly to your Instagram
+          profile and grow your social presence.
+        </p>
+
+        <div class="price">
+          ₹299 <small>/ card</small>
+        </div>
+
+        <a href="#buy" class="btn btn-primary">Buy Now</a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>How TapCard Works</h2>
+      <p>Simple for you. Simple for your customers.</p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Customer Taps</h3>
+        <p>
+          Customer taps the TapCard with their
+          NFC-enabled smartphone.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Link Opens</h3>
+        <p>
+          Your selected Google, WhatsApp or
+          Instagram destination opens.
+        </p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Customer Connects</h3>
+        <p>
+          Customer reviews, joins, follows or
+          connects with your business.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- DEMO -->
+<section id="demo">
+  <div class="container">
+
+    <div class="demo-box">
+
+      <div class="demo-card">
+        <div class="mini-logo">
+          Tap<span>Card</span>
+        </div>
+
+        <div class="tap">
+          📱 TAP HERE TO CONNECT
+        </div>
+      </div>
+
+      <h2>Experience One Tap</h2>
+
+      <p style="color:#929eae;margin:12px auto 25px;max-width:550px;">
+        TapCard combines NFC technology with a QR backup,
+        so customers can connect with your business quickly.
+      </p>
+
+      <a href="#buy" class="btn btn-primary">
+        Get Your TapCard
+      </a>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- FEATURES -->
+<section>
+  <div class="container">
+
+    <div class="section-title">
+      <h2>Why TapCard?</h2>
+      <p>Built for modern local businesses.</p>
+    </div>
+
+    <div class="features">
+
+      <div class="feature">
+        <div>📱</div>
+        <h3>NFC Technology</h3>
+        <p>Tap and connect without typing long links.</p>
+      </div>
+
+      <div class="feature">
+        <div>▣</div>
+        <h3>QR Backup</h3>
+        <p>Works even when NFC is unavailable.</p>
+      </div>
+
+      <div class="feature">
+        <div>🔄</div>
+        <h3>Flexible Links</h3>
+        <p>Destination links can be managed digitally.</p>
+      </div>
+
+      <div class="feature">
+        <div>🚀</div>
+        <h3>Easy to Use</h3>
+        <p>Give customers a faster way to connect.</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- BUY -->
+<section class="cta" id="buy">
+  <div class="container">
+
+    <h2>Ready to Get Your TapCard?</h2>
+
+    <p>
+      Choose your card and start connecting with customers
+      in one simple tap.
+    </p>
+
+    <a href="#contact" class="btn btn-primary">
+      Order Your TapCard
+    </a>
+
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+
+    <div class="section-title">
+      <h2>Contact TapCard</h2>
+      <p>Want to order or know more? Get in touch with us.</p>
+    </div>
+
+    <div style="text-align:center;">
+
+      <a
+        href="https://wa.me/919999999999"
+        class="btn btn-primary"
+        target="_blank"
+      >
+        💬 WhatsApp Us
+      </a>
+
+    </div>
+
+  </div>
+</section>
+
+
+<footer>
+  <div class="container">
+    <strong>TapCard</strong> — One Tap. More Connections.
+    <br><br>
+    © 2026 TapCard. All rights reserved.
+  </div>
+</footer>
+
+</body>
+          </html>
