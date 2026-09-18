@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Order TapCard</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#05070b;
+  color:#fff;
+  line-height:1.5;
+}
+
+.container{
+  width:92%;
+  max-width:700px;
+  margin:auto;
+}
+
+.header{
+  padding:22px 0;
+  border-bottom:1px solid #202b3a;
+}
+
+.logo{
+  font-size:25px;
+  font-weight:800;
+}
+
+.logo span{
+  color:#18a8ff;
+}
+
+.back{
+  display:inline-block;
+  margin-top:10px;
+  color:#8fa0b3;
+  font-size:13px;
+  text-decoration:none;
+}
+
+.back:hover{
+  color:#18a8ff;
+}
+
+main{
+  padding:45px 0 70px;
+}
+
+.title{
+  text-align:center;
+  margin-bottom:35px;
+}
+
+.title h1{
+  font-size:38px;
+  margin-bottom:8px;
+}
+
+.title p{
+  color:#8f9bab;
+}
+
+.form-box{
+  background:#0b1018;
+  border:1px solid #202b3a;
+  border-radius:18px;
+  padding:25px;
+  margin-bottom:20px;
+}
+
+.form-box h2{
+  font-size:20px;
+  margin-bottom:20px;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+  color:#dbe3ed;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #2a3748;
+  background:#070b11;
+  color:#fff;
+  outline:none;
+  margin-bottom:18px;
+  font-size:14px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#18a8ff;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.price-box{
+  background:#081521;
+  border:1px solid #16405c;
+  border-radius:14px;
+  padding:20px;
+  margin-top:5px;
+}
+
+.price-row{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  color:#aab6c5;
+  font-size:14px;
+}
+
+.total{
+  border-top:1px solid #26384a;
+  padding-top:14px;
+  margin-top:12px;
+  display:flex;
+  justify-content:space-between;
+  font-size:20px;
+  font-weight:800;
+}
+
+.total span:last-child{
+  color:#18a8ff;
+}
+
+.btn{
+  width:100%;
+  border:0;
+  padding:15px;
+  border-radius:10px;
+  background:#18a8ff;
+  color:#00101d;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.btn:hover{
+  background:#45baff;
+}
+
+.note{
+  text-align:center;
+  color:#718094;
+  font-size:12px;
+  margin-top:15px;
+}
+
+.success{
+  display:none;
+  background:#0b1820;
+  border:1px solid #1d536d;
+  border-radius:15px;
+  padding:25px;
+  text-align:center;
+}
+
+.success h2{
+  margin-bottom:10px;
+}
+
+.success p{
+  color:#9eacbb;
+}
+
+footer{
+  text-align:center;
+  padding:30px;
+  color:#667487;
+  font-size:12px;
+  border-top:1px solid #182230;
+}
+
+@media(max-width:500px){
+  .title h1{
+    font-size:31px;
+  }
+
+  .form-box{
+    padding:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="container">
+    <div class="logo">Tap<span>Card</span></div>
+    <a class="back" href="shop.html">← Back to TapCard</a>
+  </div>
+</header>
+
+
+<main>
+  <div class="container">
+
+    <div class="title">
+      <h1>Get Your TapCard</h1>
+      <p>Fill in your business details to place an order.</p>
+    </div>
+
+
+    <form id="orderForm">
+
+      <!-- PRODUCT -->
+      <div class="form-box">
+
+        <h2>1. Choose Your Card</h2>
+
+        <label for="cardType">Card Type</label>
+
+        <select id="cardType" required>
+          <option value="">Select card type</option>
+          <option value="Google Review">Google Review Card</option>
+          <option value="WhatsApp Group">WhatsApp Card</option>
+          <option value="Instagram">Instagram Card</option>
+        </select>
+
+
+        <label for="quantity">Quantity</label>
+
+        <input
+          type="number"
+          id="quantity"
+          min="1"
+          max="100"
+          value="1"
+          required
+        >
+
+      </div>
+
+
+      <!-- BUSINESS -->
+      <div class="form-box">
+
+        <h2>2. Business Details</h2>
+
+        <label for="shopName">Shop / Business Name</label>
+
+        <input
+          type="text"
+          id="shopName"
+          placeholder="Example: Sagar Optical"
+          required
+        >
+
+
+        <label for="ownerName">Owner Name</label>
+
+        <input
+          type="text"
+          id="ownerName"
+          placeholder="Enter owner name"
+          required
+        >
+
+
+        <label for="phone">Mobile Number</label>
+
+        <input
+          type="tel"
+          id="phone"
+          placeholder="10 digit mobile number"
+          pattern="[0-9]{10}"
+          maxlength="10"
+          required
+        >
+
+
+        <label for="city">City</label>
+
+        <input
+          type="text"
+          id="city"
+          placeholder="Example: Yavatmal"
+          required
+        >
+
+      </div>
+
+
+      <!-- DESTINATION -->
+      <div class="form-box">
+
+        <h2>3. Your Link</h2>
+
+        <label for="destination">
+          Google / WhatsApp / Instagram Link
+        </label>
+
+        <input
+          type="url"
+          id="destination"
+          placeholder="https://..."
+          required
+        >
+
+        <p class="note">
+          This is the link customers will reach after tapping or scanning your TapCard.
+        </p>
+
+      </div>
+
+
+      <!-- ADDRESS -->
+      <div class="form-box">
+
+        <h2>4. Delivery Details</h2>
+
+        <label for="address">Full Delivery Address</label>
+
+        <textarea
+          id="address"
+          placeholder="House / Shop number, Street, Area, City, State, Pincode"
+          required
+        ></textarea>
+
+      </div>
+
+
+      <!-- SUMMARY -->
+      <div class="form-box">
+
+        <h2>Order Summary</h2>
+
+        <div class="price-box">
+
+          <div class="price-row">
+            <span>Price per card</span>
+            <span>₹299</span>
+          </div>
+
+          <div class="price-row">
+            <span>Quantity</span>
+            <span id="summaryQty">1</span>
+          </div>
+
+          <div class="total">
+            <span>Total</span>
+            <span id="totalPrice">₹299</span>
+          </div>
+
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn">
+          Place Order
+        </button>
+
+        <p class="note">
+          Payment will be added after the order system is tested.
+        </p>
+
+      </div>
+
+    </form>
+
+
+    <!-- SUCCESS -->
+    <div class="success" id="successBox">
+
+      <h2>Order Details Ready ✅</h2>
+
+      <p>
+        Your order information has been captured for testing.
+        Payment integration will be connected in the next step.
+      </p>
+
+    </div>
+
+  </div>
+</main>
+
+
+<footer>
+  TapCard — One Tap. More Connections.
+  <br><br>
+  © 2026 TapCard. All rights reserved.
+</footer>
+
+
+<script>
+
+const PRICE = 299;
+
+const quantityInput = document.getElementById("quantity");
+const summaryQty = document.getElementById("summaryQty");
+const totalPrice = document.getElementById("totalPrice");
+const orderForm = document.getElementById("orderForm");
+const successBox = document.getElementById("successBox");
+
+
+function updateTotal(){
+
+  let quantity = parseInt(quantityInput.value) || 1;
+
+  if(quantity < 1){
+    quantity = 1;
+    quantityInput.value = 1;
+  }
+
+  if(quantity > 100){
+    quantity = 100;
+    quantityInput.value = 100;
+  }
+
+  const total = quantity * PRICE;
+
+  summaryQty.innerText = quantity;
+
+  totalPrice.innerText =
+    "₹" + total.toLocaleString("en-IN");
+}
+
+
+quantityInput.addEventListener("input", updateTotal);
+
+
+orderForm.addEventListener("submit", function(event){
+
+  event.preventDefault();
+
+  updateTotal();
+
+  successBox.style.display = "block";
+
+  successBox.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+});
+
+</script>
+
+</body>
+</html>
