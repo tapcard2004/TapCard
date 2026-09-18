@@ -406,7 +406,20 @@ footer{
 </footer>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+
+const SUPABASE_URL =
+"https://ekgfbjmftxmgkicvjhap.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_ujjKE_jxYbfUl4iHnSFmtw_yU2Qa5Ug";
+
+const db = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 const PRICE = 299;
 
@@ -421,35 +434,109 @@ function updateTotal(){
 
   let quantity = parseInt(quantityInput.value) || 1;
 
-  if(quantity < 1){
-    quantity = 1;
-    quantityInput.value = 1;
-  }
+  if(quantity < 1) quantity = 1;
+  if(quantity > 100) quantity = 100;
 
-  if(quantity > 100){
-    quantity = 100;
-    quantityInput.value = 100;
-  }
-
-  const total = quantity * PRICE;
+  quantityInput.value = quantity;
 
   summaryQty.innerText = quantity;
-
   totalPrice.innerText =
-    "₹" + total.toLocaleString("en-IN");
+    "₹" + (quantity * PRICE).toLocaleString("en-IN");
 }
 
 
 quantityInput.addEventListener("input", updateTotal);
 
 
-orderForm.addEventListener("submit", function(event){
+orderForm.addEventListener("submit", async function(event){
 
   event.preventDefault();
 
   updateTotal();
 
+  const cardType =
+    document.getElementById("cardType").value;
+
+  const quantity =
+    parseInt(document.getElementById("quantity").value);
+
+  const shopName =
+    document.getElementById("shopName").value.trim();
+
+  const ownerName =
+    document.getElementById("ownerName").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const city =
+    document.getElementById("city").value.trim();
+
+  const destinationUrl =
+    document.getElementById("destination").value.trim();
+
+  const deliveryAddress =
+    document.getElementById("address").value.trim();
+
+  const orderNumber =
+    "TC" + Date.now().toString().slice(-8);
+
+  const totalAmount =
+    quantity * PRICE;
+
+
+  const { data, error } = await db
+    .from("orders")
+    .insert({
+      order_number: orderNumber,
+      card_type: cardType,
+      quantity: quantity,
+      price_per_card: PRICE,
+      total_amount: totalAmount,
+      shop_name: shopName,
+      owner_name: ownerName,
+      phone: phone,
+      city: city,
+      destination_url: destinationUrl,
+      delivery_address: deliveryAddress,
+      payment_status: "Pending",
+      order_status: "New"
+    })
+    .select()
+    .single();
+
+
+  if(error){
+
+    alert(
+      "Order save nahi hua.\n\n" +
+      error.message
+    );
+
+    console.error(error);
+    return;
+  }
+
+
   successBox.style.display = "block";
+
+  successBox.innerHTML = `
+    <h2>Order Received ✅</h2>
+
+    <p>
+      Your order number is:
+      <strong>${data.order_number}</strong>
+    </p>
+
+    <p style="margin-top:10px;">
+      Quantity: ${data.quantity}<br>
+      Total: ₹${Number(data.total_amount).toLocaleString("en-IN")}
+    </p>
+
+    <p style="margin-top:15px;">
+      Payment will be added soon.
+    </p>
+  `;
 
   successBox.scrollIntoView({
     behavior:"smooth",
@@ -457,6 +544,9 @@ orderForm.addEventListener("submit", function(event){
   });
 
 });
+
+
+updateTotal();
 
 </script>
 
