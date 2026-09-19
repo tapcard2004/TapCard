@@ -1209,7 +1209,134 @@ db.auth
 
   }
 );
+//
+  /* =========================
+   ADMIN ORDERS
+========================= */
 
+async function loadAdminOrders(){
+
+  if(role !== "admin") return;
+
+  const { data, error } = await db
+    .from("orders")
+    .select("*")
+    .order("created_at", { ascending:false });
+
+  if(error){
+    console.error("Orders error:", error);
+    return;
+  }
+
+  let box = document.getElementById("adminOrdersBox");
+
+  if(!box){
+
+    box = document.createElement("div");
+
+    box.id = "adminOrdersBox";
+
+    box.style.cssText = `
+      background:#111827;
+      color:white;
+      padding:20px;
+      margin:20px 0;
+      border-radius:16px;
+      border:1px solid #263244;
+      overflow-x:auto;
+    `;
+
+    document.body.appendChild(box);
+  }
+
+  let html = `
+    <h2 style="margin-top:0;">📦 Orders</h2>
+  `;
+
+  if(!data || data.length === 0){
+
+    html += `
+      <p style="color:#9ca3af;">
+        Abhi koi order nahi hai.
+      </p>
+    `;
+
+  }else{
+
+    html += `
+      <table style="
+        width:100%;
+        border-collapse:collapse;
+        font-size:14px;
+      ">
+
+        <tr style="border-bottom:1px solid #374151;">
+          <th style="padding:10px;text-align:left;">Order</th>
+          <th style="padding:10px;text-align:left;">Shop</th>
+          <th style="padding:10px;text-align:left;">Card</th>
+          <th style="padding:10px;text-align:left;">Qty</th>
+          <th style="padding:10px;text-align:left;">Amount</th>
+          <th style="padding:10px;text-align:left;">Payment</th>
+          <th style="padding:10px;text-align:left;">Status</th>
+        </tr>
+    `;
+
+    data.forEach(order => {
+
+      html += `
+        <tr style="border-bottom:1px solid #263244;">
+
+          <td style="padding:10px;">
+            ${order.order_number || "-"}
+          </td>
+
+          <td style="padding:10px;">
+            ${order.shop_name || "-"}
+          </td>
+
+          <td style="padding:10px;">
+            ${order.card_type || "-"}
+          </td>
+
+          <td style="padding:10px;">
+            ${order.quantity || 0}
+          </td>
+
+          <td style="padding:10px;">
+            ₹${order.total_amount || 0}
+          </td>
+
+          <td style="padding:10px;">
+            ${order.payment_status || "-"}
+          </td>
+
+          <td style="padding:10px;">
+            ${order.order_status || "-"}
+          </td>
+
+        </tr>
+      `;
+    });
+
+    html += `</table>`;
+  }
+
+  box.innerHTML = html;
+}
+
+
+/* Admin login ke baad orders load karo */
+
+const ordersCheck = setInterval(() => {
+
+  if(role === "admin"){
+
+    clearInterval(ordersCheck);
+
+    loadAdminOrders();
+  }
+
+}, 500);
 </script>
 
 </body>
