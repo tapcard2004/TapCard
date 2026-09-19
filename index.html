@@ -1310,9 +1310,15 @@ async function loadAdminOrders(){
             ${order.payment_status || "-"}
           </td>
 
-          <td style="padding:10px;">
-            ${order.order_status || "-"}
-          </td>
+        <td style="padding:10px;">
+  <select onchange="updateOrderStatus('${order.id}', this.value)">
+    <option value="New" ${order.order_status==="New"?"selected":""}>New</option>
+    <option value="Processing" ${order.order_status==="Processing"?"selected":""}>Processing</option>
+    <option value="Dispatched" ${order.order_status==="Dispatched"?"selected":""}>Dispatched</option>
+    <option value="Delivered" ${order.order_status==="Delivered"?"selected":""}>Delivered</option>
+    <option value="Cancelled" ${order.order_status==="Cancelled"?"selected":""}>Cancelled</option>
+  </select>
+</td>
 
         </tr>
       `;
@@ -1337,6 +1343,23 @@ const ordersCheck = setInterval(() => {
   }
 
 }, 500);
+  async function updateOrderStatus(orderId, newStatus){
+
+  const { error } = await db
+    .from("orders")
+    .update({
+      order_status: newStatus
+    })
+    .eq("id", orderId);
+
+  if(error){
+    alert("Status update nahi hua.\n" + error.message);
+    console.error(error);
+    return;
+  }
+
+  loadAdminOrders();
+  }
 </script>
 
 </body>
