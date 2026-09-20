@@ -752,11 +752,12 @@ async function loadUser(u){
     await profile();
 
 
-    if(role === "admin"){
+  if(role === "admin"){
 
-      await adminData();
+  await adminData();
+  await loadAdminOrders();
 
-    }
+  }
 
   }
   finally{
@@ -1287,8 +1288,9 @@ function createMyOrdersButton(){
   /* Dashboard ke andar button lagao */
 
   const dashboard =
-    document.querySelector("#adminDashboard") ||
-    document.querySelector(".admin-dashboard");
+  document.querySelector("#admin") ||
+  document.querySelector("#adminDashboard") ||
+  document.querySelector(".admin-dashboard");
 
 if(dashboard){
   dashboard.appendChild(button);
