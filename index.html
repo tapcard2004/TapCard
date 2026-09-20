@@ -1290,35 +1290,12 @@ function createMyOrdersButton(){
     document.querySelector("#adminDashboard") ||
     document.querySelector(".admin-dashboard");
 
-  if(dashboard){
-
-    dashboard.appendChild(button);
-
-  }else{
-
-    /*
-      Agar dashboard ka specific ID nahi mila
-      toh Activate Card ke baad button lagayega.
-    */
-
-    const activate =
-      document.querySelector("button");
-
-    if(activate && activate.parentElement){
-
-      activate.parentElement.appendChild(button);
-
-    }else{
-
-      document.body.appendChild(button);
-
-    }
-
-  }
-
+if(dashboard){
+  dashboard.appendChild(button);
+}else{
+  return;
 }
-
-
+}
 /* =========================================================
    OPEN MY ORDERS
 ========================================================= */
