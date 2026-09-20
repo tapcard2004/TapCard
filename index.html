@@ -1281,10 +1281,18 @@ async function loadAdminOrders(){
         </tr>
     `;
 
+    window.adminOrdersData = data;
+
     data.forEach(order => {
 
       html += `
-        <tr style="border-bottom:1px solid #263244;">
+        <tr
+          onclick="showOrderDetailsById('${order.id}')"
+          style="
+            border-bottom:1px solid #263244;
+            cursor:pointer;
+          "
+        >
 
           <td style="padding:10px;">
             ${order.order_number || "-"}
@@ -1310,15 +1318,18 @@ async function loadAdminOrders(){
             ${order.payment_status || "-"}
           </td>
 
-        <td style="padding:10px;">
-  <select onchange="updateOrderStatus('${order.id}', this.value)">
-    <option value="New" ${order.order_status==="New"?"selected":""}>New</option>
-    <option value="Processing" ${order.order_status==="Processing"?"selected":""}>Processing</option>
-    <option value="Dispatched" ${order.order_status==="Dispatched"?"selected":""}>Dispatched</option>
-    <option value="Delivered" ${order.order_status==="Delivered"?"selected":""}>Delivered</option>
-    <option value="Cancelled" ${order.order_status==="Cancelled"?"selected":""}>Cancelled</option>
-  </select>
-</td>
+          <td style="padding:10px;" onclick="event.stopPropagation();">
+            <select
+              onchange="updateOrderStatus('${order.id}', this.value)"
+              style="padding:8px;border-radius:8px;"
+            >
+              <option value="New" ${order.order_status==="New"?"selected":""}>New</option>
+              <option value="Processing" ${order.order_status==="Processing"?"selected":""}>Processing</option>
+              <option value="Dispatched" ${order.order_status==="Dispatched"?"selected":""}>Dispatched</option>
+              <option value="Delivered" ${order.order_status==="Delivered"?"selected":""}>Delivered</option>
+              <option value="Cancelled" ${order.order_status==="Cancelled"?"selected":""}>Cancelled</option>
+            </select>
+          </td>
 
         </tr>
       `;
@@ -1330,6 +1341,165 @@ async function loadAdminOrders(){
   box.innerHTML = html;
 }
 
+
+/* =========================
+   ORDER DETAILS
+========================= */
+
+  function showOrderDetailsById(orderId){
+
+  const order = (window.adminOrdersData || [])
+    .find(x => String(x.id) === String(orderId));
+
+  if(!order){
+    alert("Order details nahi mile.");
+    return;
+  }
+
+  showOrderDetails(order);
+  }
+
+function showOrderDetails(order){
+
+  const existing = document.getElementById("orderDetailsPopup");
+
+  if(existing){
+    existing.remove();
+  }
+
+  const popup = document.createElement("div");
+
+  popup.id = "orderDetailsPopup";
+
+  popup.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    z-index:99999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  `;
+
+  popup.innerHTML = `
+    <div style="
+      background:#111827;
+      color:white;
+      width:100%;
+      max-width:520px;
+      max-height:90vh;
+      overflow:auto;
+      border-radius:18px;
+      padding:22px;
+      box-sizing:border-box;
+    ">
+
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:20px;
+      ">
+
+        <h2 style="margin:0;">
+          📦 Order Details
+        </h2>
+
+        <button
+          onclick="document.getElementById('orderDetailsPopup').remove()"
+          style="
+            background:#ef4444;
+            color:white;
+            border:0;
+            border-radius:8px;
+            padding:8px 12px;
+            font-size:18px;
+          "
+        >
+          ✕
+        </button>
+
+      </div>
+
+      <p><b>Order Number:</b><br>
+        ${order.order_number || "-"}
+      </p>
+
+      <p><b>Shop / Business:</b><br>
+        ${order.shop_name || "-"}
+      </p>
+
+      <p><b>Owner Name:</b><br>
+        ${order.owner_name || "-"}
+      </p>
+
+      <p><b>Customer Phone:</b><br>
+        <a
+          href="tel:${order.phone || ""}"
+          style="color:#38bdf8;"
+        >
+          ${order.phone || "-"}
+        </a>
+      </p>
+
+      <p><b>Card Type:</b><br>
+        ${order.card_type || "-"}
+      </p>
+
+      <p><b>Quantity:</b><br>
+        ${order.quantity || 0}
+      </p>
+
+      <p><b>Total Amount:</b><br>
+        ₹${order.total_amount || 0}
+      </p>
+
+      <p><b>Customer Link:</b><br>
+        ${
+          order.destination_url
+          ?
+          `<a href="${order.destination_url}" target="_blank" style="color:#38bdf8;word-break:break-all;">
+            ${order.destination_url}
+          </a>`
+          :
+          "-"
+        }
+      </p>
+
+      <p><b>Delivery Address:</b><br>
+        ${order.delivery_address || "-"}
+      </p>
+
+      <p><b>Payment Status:</b><br>
+        ${order.payment_status || "-"}
+      </p>
+
+      <p><b>Order Status:</b><br>
+        ${order.order_status || "-"}
+      </p>
+
+      <button
+        onclick="document.getElementById('orderDetailsPopup').remove()"
+        style="
+          width:100%;
+          margin-top:15px;
+          padding:12px;
+          border:0;
+          border-radius:10px;
+          background:#2563eb;
+          color:white;
+          font-size:16px;
+        "
+      >
+        Close
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+}
 
 /* Admin login ke baad orders load karo */
 
