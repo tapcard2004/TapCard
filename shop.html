@@ -654,7 +654,6 @@ footer strong{
   </div>
 </section>
 
-
 <footer>
   <div class="container">
     <strong>TapCard</strong> — One Tap. More Connections.
@@ -663,5 +662,420 @@ footer strong{
   </div>
 </footer>
 
-</body>
+  <!-- ================= CUSTOMER ORDER FORM ================= -->
+
+<style>
+#orderModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  z-index:99999;
+  overflow-y:auto;
+  padding:20px;
+}
+
+.order-box{
+  max-width:520px;
+  margin:30px auto;
+  background:#0b1220;
+  color:#fff;
+  border:1px solid #26344a;
+  border-radius:18px;
+  padding:25px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+
+.order-box h2{
+  margin-top:0;
+  color:#18a8ff;
+}
+
+.order-field{
+  margin-bottom:15px;
+}
+
+.order-field label{
+  display:block;
+  margin-bottom:6px;
+  font-weight:700;
+  font-size:14px;
+}
+
+.order-field input,
+.order-field select,
+.order-field textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  border-radius:9px;
+  border:1px solid #344154;
+  background:#111827;
+  color:#fff;
+  font-size:14px;
+}
+
+.order-field textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.order-total{
+  background:#111827;
+  border:1px solid #26344a;
+  padding:15px;
+  border-radius:12px;
+  margin:18px 0;
+  font-size:18px;
+  font-weight:700;
+}
+
+.order-actions{
+  display:flex;
+  gap:10px;
+}
+
+.order-actions button{
+  flex:1;
+  padding:13px;
+  border:0;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.order-submit{
+  background:#18a8ff;
+  color:#00101d;
+}
+
+.order-close{
+  background:#263244;
+  color:#fff;
+}
+
+#orderMessage{
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  display:none;
+  font-size:14px;
+}
+</style>
+
+<div id="orderModal">
+
+  <div class="order-box">
+
+    <h2>🛒 Order Your TapCard</h2>
+
+    <p style="color:#9ca3af;">
+      Fill your details and submit your order.
+    </p>
+
+    <form id="customerOrderForm">
+
+      <div class="order-field">
+        <label>Card Type</label>
+
+        <select id="orderCardType" required>
+          <option value="Google Review">Google Review</option>
+          <option value="WhatsApp Group">WhatsApp Group</option>
+          <option value="Instagram">Instagram</option>
+        </select>
+
+      </div>
+
+      <div class="order-field">
+        <label>Shop / Business Name</label>
+
+        <input
+          type="text"
+          id="orderShopName"
+          placeholder="Your shop name"
+          required
+        >
+
+      </div>
+
+      <div class="order-field">
+        <label>Customer / Owner Name</label>
+
+        <input
+          type="text"
+          id="orderOwnerName"
+          placeholder="Your name"
+          required
+        >
+
+      </div>
+
+      <div class="order-field">
+        <label>Phone Number</label>
+
+        <input
+          type="tel"
+          id="orderPhone"
+          placeholder="10 digit mobile number"
+          required
+        >
+
+      </div>
+
+      <div class="order-field">
+        <label>Customer Link</label>
+
+        <input
+          type="url"
+          id="orderDestination"
+          placeholder="https://..."
+          required
+        >
+
+        <small style="color:#8896a8;">
+          Google Review / WhatsApp Group / Instagram link
+        </small>
+
+      </div>
+
+      <div class="order-field">
+        <label>Quantity</label>
+
+        <input
+          type="number"
+          id="orderQuantity"
+          value="1"
+          min="1"
+          max="100"
+          required
+        >
+
+      </div>
+
+      <div class="order-field">
+        <label>Delivery Address</label>
+
+        <textarea
+          id="orderAddress"
+          placeholder="Complete delivery address"
+          required
+        ></textarea>
+
+      </div>
+
+      <div class="order-total">
+        Total: ₹<span id="orderTotal">299</span>
+      </div>
+
+      <div class="order-actions">
+
+        <button
+          type="button"
+          class="order-close"
+          onclick="closeOrderForm()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="order-submit"
+          id="submitOrderBtn"
+        >
+          Place Order
+        </button>
+
+      </div>
+
+      <div id="orderMessage"></div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const TAPCARD_SUPABASE_URL =
+  "https://ekgfbjmftxmgkicvjhap.supabase.co";
+
+const TAPCARD_SUPABASE_KEY =
+  "sb_publishable_ujjKE_jxYbfUl4iHnSFmtw_yU2Qa5Ug";
+
+const tapcardDB =
+  window.supabase.createClient(
+    TAPCARD_SUPABASE_URL,
+    TAPCARD_SUPABASE_KEY
+  );
+
+
+function openOrderForm(cardType){
+
+  document.getElementById("orderModal").style.display = "block";
+
+  document.getElementById("orderCardType").value = cardType;
+
+  document.getElementById("orderMessage").style.display = "none";
+
+  document.body.style.overflow = "hidden";
+
+}
+
+
+function closeOrderForm(){
+
+  document.getElementById("orderModal").style.display = "none";
+
+  document.body.style.overflow = "";
+
+}
+
+
+function updateOrderTotal(){
+
+  const quantity =
+    Number(document.getElementById("orderQuantity").value) || 1;
+
+  document.getElementById("orderTotal").textContent =
+    quantity * 299;
+
+}
+
+
+document
+  .getElementById("orderQuantity")
+  .addEventListener("input", updateOrderTotal);
+
+
+document
+  .getElementById("customerOrderForm")
+  .addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const button =
+      document.getElementById("submitOrderBtn");
+
+    const message =
+      document.getElementById("orderMessage");
+
+    const shopName =
+      document.getElementById("orderShopName").value.trim();
+
+    const ownerName =
+      document.getElementById("orderOwnerName").value.trim();
+
+    const phone =
+      document.getElementById("orderPhone").value.trim();
+
+    const cardType =
+      document.getElementById("orderCardType").value;
+
+    const quantity =
+      Number(document.getElementById("orderQuantity").value);
+
+    const destination =
+      document.getElementById("orderDestination").value.trim();
+
+    const address =
+      document.getElementById("orderAddress").value.trim();
+
+
+    if(quantity < 1){
+
+      alert("Quantity minimum 1 honi chahiye.");
+
+      return;
+
+    }
+
+
+    button.disabled = true;
+
+    button.textContent = "Placing Order...";
+
+
+    try{
+
+      const { data, error } =
+        await tapcardDB.rpc(
+          "create_customer_order",
+          {
+            p_shop_name: shopName,
+            p_owner_name: ownerName,
+            p_phone: phone,
+            p_card_type: cardType,
+            p_quantity: quantity,
+            p_destination_url: destination,
+            p_delivery_address: address
+          }
+        );
+
+
+      if(error){
+
+        throw error;
+
+      }
+
+
+      const order =
+        Array.isArray(data) ? data[0] : data;
+
+
+      message.style.display = "block";
+
+      message.style.background = "#06351f";
+
+      message.style.color = "#7fffb5";
+
+      message.innerHTML =
+        "✅ Order placed successfully!<br><br>" +
+        "Order Number: <b>" +
+        (order?.order_number || "-") +
+        "</b><br><br>" +
+        "Our team will process your order soon.";
+
+
+      document
+        .getElementById("customerOrderForm")
+        .reset();
+
+
+      document.getElementById("orderQuantity").value = 1;
+
+      updateOrderTotal();
+
+
+    }catch(error){
+
+      console.error("Order Error:", error);
+
+      message.style.display = "block";
+
+      message.style.background = "#3b1010";
+
+      message.style.color = "#ff9b9b";
+
+      message.textContent =
+        "❌ Order place nahi hua. Please try again.";
+
+    }
+
+
+    button.disabled = false;
+
+    button.textContent = "Place Order";
+
+  });
+
+</script>
+
+      </body>
+        
           </html>
