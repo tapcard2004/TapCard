@@ -1149,7 +1149,71 @@ async function activate(){
   }
 
 }
+async function editCard(card){
 
+  if(role !== "admin"){
+    return msg("error","❌ Sirf admin card edit kar sakta hai.");
+  }
+
+  const shop = prompt("Shop Name:", card.shop_name || "");
+  if(shop === null) return;
+
+  const phone = prompt("Shop Owner Phone:", card.shop_owner_phone || "");
+  if(phone === null) return;
+
+  const city = prompt("Shop City:", card.shop_city || "");
+  if(city === null) return;
+
+  const url = prompt("Customer Link:", card.destination_url || "");
+  if(url === null) return;
+
+  const type = prompt(
+    "Card Type (Instagram / WhatsApp Group / Google Review):",
+    card.card_type || ""
+  );
+  if(type === null) return;
+
+  const agentId = card.agent_id;
+
+  if(!shop.trim() || !phone.trim() || !city.trim() || !url.trim()){
+    return msg("error","❌ Sabhi fields bharna zaroori hai.");
+  }
+
+  try{
+
+    const { data, error } = await db.rpc(
+      "update_card_admin",
+      {
+        p_card_number: card.card_number,
+        p_card_type: type.trim(),
+        p_shop_name: shop.trim(),
+        p_shop_owner_phone: phone.trim(),
+        p_shop_city: city.trim(),
+        p_destination_url: url.trim(),
+        p_agent_id: agentId
+      }
+    );
+
+    if(error){
+      return msg("error","❌ " + error.message);
+    }
+
+    msg(
+      "ok",
+      "✅ " + card.card_number + " successfully updated!"
+    );
+
+    await adminData();
+
+  }catch(e){
+
+    msg(
+      "error",
+      "❌ " + e.message
+    );
+
+  }
+}
 
 /* =========================
    LOGOUT
