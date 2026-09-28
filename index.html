@@ -958,6 +958,7 @@ async function adminData(){
     "<th>City</th>" +
     "<th>Agent</th>" +
     "<th>Activated</th>" +
+    "<th>Action</th>" +
     "</tr>" +
 
     C.map(x =>
@@ -1003,6 +1004,10 @@ async function adminData(){
       ) +
 
       "</td>" +
+
+      "<td>" +
+"<button onclick=\"editCardByNumber('" + esc(x.card_number) + "')\" style=\"background:#2563eb;color:#fff;border:0;padding:7px 10px;border-radius:6px;cursor:pointer;\">✏️ Edit</button>" +
+"</td>" +
 
       "</tr>"
 
@@ -1214,7 +1219,20 @@ async function editCard(card){
 
   }
 }
+async function editCardByNumber(cardNumber){
 
+  const { data, error } = await db
+    .from("cards")
+    .select("*")
+    .eq("card_number", cardNumber)
+    .single();
+
+  if(error){
+    return msg("error","❌ " + error.message);
+  }
+
+  editCard(data);
+}
 /* =========================
    LOGOUT
 ========================= */
